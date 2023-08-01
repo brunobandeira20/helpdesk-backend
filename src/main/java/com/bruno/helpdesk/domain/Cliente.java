@@ -28,7 +28,6 @@ public class Cliente extends Pessoa{
 
 	public Cliente(Integer id, String name, String cpf, String email, String senha) {
 		super(id, name, cpf, email, senha);
-		// TODO Auto-generated constructor stub
 	}
 
 	public List<Chamado> getChamados() {
