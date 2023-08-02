@@ -3,6 +3,8 @@ package com.bruno.helpdesk.services;
 import java.util.List;
 import java.util.Optional;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -47,5 +49,21 @@ public class TecnicoService {
 		if(pessoa.isPresent() && pessoa.get().getId() != tecnicoDTO.getId()) {
 			throw new DataIntegrityViolationException("Email já cadastrado");
 		}
+	}
+
+	public Tecnico update(Integer id, @Valid TecnicoDTO newObj) {
+		newObj.setId(id);
+		Tecnico oldObj = findById(id);
+		validarCpfEEmail(newObj);
+		oldObj = new Tecnico(newObj);
+		return tecnicoRepository.save(oldObj);
+	}
+
+	public void delete(Integer id) {
+		Tecnico obj = findById(id);
+		if(obj.getChamados().size() > 0) {
+			throw new DataIntegrityViolationException("O tecnico possui ordens de serviço e não pode ser deletado!");
+		}
+		tecnicoRepository.deleteById(id);
 	}
 }
