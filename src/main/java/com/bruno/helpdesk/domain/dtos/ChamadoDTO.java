@@ -3,9 +3,9 @@ package com.bruno.helpdesk.domain.dtos;
 import java.io.Serializable;
 import java.time.LocalDate;
 
+import javax.validation.constraints.NotNull;
+
 import com.bruno.helpdesk.domain.Chamado;
-import com.bruno.helpdesk.domain.enums.Prioridade;
-import com.bruno.helpdesk.domain.enums.Status;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 public class ChamadoDTO implements Serializable {
@@ -20,11 +20,17 @@ public class ChamadoDTO implements Serializable {
 	private LocalDate dataAbertura = LocalDate.now();
 	@JsonFormat(pattern = "dd/MM/yyyy")
 	private LocalDate dataFechamento;
-	private Prioridade prioridade;
-	private Status status;
+	@NotNull(message = "O campo PRIORIDADE é obrigatório")
+	private Integer prioridade;
+	@NotNull(message = "O campo STATUS é obrigatório")
+	private Integer status;
+	@NotNull(message = "O campo TITULO é obrigatório")
 	private String titulo;
+	@NotNull(message = "O campo OBSERVACOES é obrigatório")
 	private String observacoes;
+	@NotNull(message = "O campo CLIENTE é obrigatório")
 	private Integer cliente;
+	@NotNull(message = "O campo TECNICO é obrigatório")
 	private Integer tecnico;
 	private String nomeTecnico;
 	private String nomeCliente;
@@ -39,8 +45,8 @@ public class ChamadoDTO implements Serializable {
 		this.id = obj.getId();
 		this.dataAbertura = obj.getDataAbertura();
 		this.dataFechamento = obj.getDataAbertura();
-		this.prioridade = obj.getPrioridade();
-		this.status = obj.getStatus();
+		this.prioridade = obj.getPrioridade().getCodigo();
+		this.status = obj.getStatus().getCodigo();
 		this.titulo = obj.getTitulo();
 		this.observacoes = obj.getObservacoes();
 		this.cliente = obj.getCliente().getId();
@@ -73,19 +79,19 @@ public class ChamadoDTO implements Serializable {
 		this.dataFechamento = dataFechamento;
 	}
 
-	public Prioridade getPrioridade() {
+	public Integer getPrioridade() {
 		return prioridade;
 	}
 
-	public void setPrioridade(Prioridade prioridade) {
+	public void setPrioridade(Integer prioridade) {
 		this.prioridade = prioridade;
 	}
 
-	public Status getStatus() {
+	public Integer getStatus() {
 		return status;
 	}
 
-	public void setStatus(Status status) {
+	public void setStatus(Integer status) {
 		this.status = status;
 	}
 

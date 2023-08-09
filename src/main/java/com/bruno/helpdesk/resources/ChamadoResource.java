@@ -1,12 +1,23 @@
 package com.bruno.helpdesk.resources;
 
+import java.net.URI;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import com.bruno.helpdesk.domain.Chamado;
 import com.bruno.helpdesk.domain.dtos.ChamadoDTO;
 import com.bruno.helpdesk.services.ChamadoService;
 
@@ -20,5 +31,26 @@ public class ChamadoResource {
 	@GetMapping(value = "/{id}")
 	public ResponseEntity<ChamadoDTO> findById(@PathVariable Integer id){
 		return ResponseEntity.ok().body(new ChamadoDTO(chamadoService.findById(id)));
+	}
+	
+	@GetMapping
+	public ResponseEntity<List<ChamadoDTO>> findAll(){
+		List<Chamado> chamados = chamadoService.findAll();
+		List<ChamadoDTO> chamadosDTO = chamados.stream().map(x -> new ChamadoDTO(x)).collect(Collectors.toList());
+		return ResponseEntity.ok().body(chamadosDTO);
+	}
+	
+	@PostMapping
+	public ResponseEntity<ChamadoDTO> create(@Valid @RequestBody ChamadoDTO obj){
+		Chamado chamado = chamadoService.create(obj);
+		URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
+				.path("/{id}").buildAndExpand(chamado.getId()).toUri();
+		return ResponseEntity.created(uri).build();
+	}
+	
+	@PutMapping(value = "/{id}")
+	public ResponseEntity<ChamadoDTO> update(@PathVariable Integer id, @RequestBody ChamadoDTO objDTO){
+		Chamado newObj = chamadoService.update(id, objDTO);
+		return ResponseEntity.ok().body(new ChamadoDTO(newObj));
 	}
 }
