@@ -3,6 +3,7 @@ package com.bruno.helpdesk.services;
 import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.bruno.helpdesk.domain.Chamado;
@@ -25,12 +26,16 @@ public class DBService {
 	@Autowired
 	private ChamadoRepository chamadoRepository;
 
+	@Autowired
+	private BCryptPasswordEncoder bCryptPasswordEncoder;
+	
+	
 	public void instanciaDB() {
 
-		Tecnico tecnico1 = new Tecnico(null, "Bruno Bandeira", "012.123.434-23", "brunobandeira20@gmail.com", "123");
+		Tecnico tecnico1 = new Tecnico(null, "Bruno Bandeira", "012.123.434-23", "brunobandeira20@gmail.com", bCryptPasswordEncoder.encode("123"));
 		tecnico1.addPerfis(Perfil.ADMIN);
 
-		Cliente cliente1 = new Cliente(null, "Maria das dores", "10230405066", "maria@gmail.com", "123321");
+		Cliente cliente1 = new Cliente(null, "Maria das dores", "10230405066", "maria@gmail.com", bCryptPasswordEncoder.encode("1232123"));
 
 		Chamado chamado1 = new Chamado(null, Prioridade.ALTA, Status.EM_ANDAMENTO, "Chamado 01", "Primeiro Chamado",
 				cliente1, tecnico1);
