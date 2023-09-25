@@ -6,7 +6,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
 
 import com.bruno.helpdesk.domain.Tecnico;
 import com.bruno.helpdesk.domain.enums.Perfil;
